@@ -58,5 +58,5 @@ object Main extends App {
         else      buf += (if (node eq p) ")" else "]")
     }
   }.mkString)
- 
+
 }
