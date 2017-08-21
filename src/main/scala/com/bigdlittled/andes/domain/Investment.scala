@@ -20,7 +20,7 @@ case class Holding[+N](portfolio: N, asset: N, amount: Double)
          nodes.productElement(1).asInstanceOf[N], amount)
   }
 
-  def keyAttributes = Seq(amount)
+  def keyAttributes = Seq(amount) // This is wrong. There's nothing really "key" about the amount
   override def copy[NN](newNodes: Product) = new Holding[NN](newNodes, amount)
   override protected def attributesToString = s" ($amount)" 
 }

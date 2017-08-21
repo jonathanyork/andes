@@ -21,13 +21,14 @@ object Main extends App {
      Investment("Equities")~>Investment("EUR Equities") ### 0.4,
        Investment("EUR Equities")~>Investment("EUR Equities Excess Returns", ReturnStream) ### 1.0,
        Investment("EUR Equities")~>Investment("EUR Cash Returns", ReturnStream) ### 1.0,
-   Investment("Portfolio")~>Investment("Bonds") ### 0.5,
+   Investment("Global 60/40", Portfolio)~>Investment("Bonds") ### 0.5,
      Investment("Bonds")~>Investment("Nominal Bonds") ### 0.7,
        Investment("Nominal Bonds")~>Investment("Nominal Bonds Excess Returns", ReturnStream) ### 1.0,
        Investment("Nominal Bonds")~>Investment("USD Cash Returns", ReturnStream) ### 1.0,
      Investment("Bonds")~>Investment("IL Bonds") ### 0.3,
        Investment("IL Bonds")~>Investment("IL Bonds Excess Returns", ReturnStream) ### 1.0,
-       Investment("IL Bonds")~>Investment("USD Cash Returns", ReturnStream) ### 1.0)
+       Investment("IL Bonds")~>Investment("USD Cash Returns", ReturnStream) ### 1.0,
+   (Investment("Global 60/40", Portfolio)~+#>User("Big Boss"))(Permission.Read))
 
   // All the nodes
   println(g.nodes mkString ":")
@@ -54,8 +55,8 @@ object Main extends App {
   println((ArrayBuffer.empty[String] /: p.innerNodeDownUpTraverser) {
     (buf, param) => param match {
       case (down, node) => 
-        if (down) buf += (if (node eq p) "(" else "[") += node.name
-        else      buf += (if (node eq p) ")" else "]")
+        if (down) buf += (if (node eq p) "(" else "[") += node.name // Going down...
+        else      buf += (if (node eq p) ")" else "]")              // ...and up
     }
   }.mkString)
 
