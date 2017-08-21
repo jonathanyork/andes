@@ -40,13 +40,28 @@ object Taxonomy {
 }
 
 object Filters {
-  case object AssetsOnly extends ((Investment) => Boolean) {
-    def apply(i: Investment) = {i.investmentType == Taxonomy.Asset}
+  case object AssetsOnly extends ((Any) => Boolean) {
+    def apply(a: Any) = a match {
+      case a: Investment => a.investmentType == Taxonomy.Asset
+      case _             => false
+    }
   }
-  case object ReturnStreamsOnly extends ((Investment) => Boolean) {
-    def apply(i: Investment) = {i.investmentType == Taxonomy.ReturnStream}
+  case object ReturnStreamsOnly extends ((Any) => Boolean) {
+    def apply(a: Any) = a match {
+      case a: Investment => a.investmentType == Taxonomy.ReturnStream
+      case _             => false
+    }
   }
-  case object PortfoliosOnly extends ((Investment) => Boolean) {
-    def apply(i: Investment) = {i.investmentType == Taxonomy.Portfolio}
+  case object PortfoliosOnly extends ((Any) => Boolean) {
+    def apply(a: Any) = a match {
+      case a: Investment => a.investmentType == Taxonomy.Portfolio
+      case _             => false
+    }
+  }
+  case object UsersOnly extends ((Any) => Boolean) {
+    def apply(a: Any) = a match {
+      case a: User => true
+      case _       => false
+    }
   }
  }
