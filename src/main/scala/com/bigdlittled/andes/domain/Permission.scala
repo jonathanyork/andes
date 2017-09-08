@@ -23,9 +23,6 @@ case class Permission[+N](investment: N, user: N, operation: Permission.Operatio
 }
 
 object Permission {
-  implicit final class ImplicitEdge[A <: Investment](val e: DiEdge[A]) extends AnyVal {
-    def ### (amount: Double) = new Holding[A](e.source, e.target, amount)
-  }
   sealed trait Operation
   case object Read extends Operation
   case object Modify extends Operation

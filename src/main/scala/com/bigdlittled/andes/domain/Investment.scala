@@ -9,8 +9,13 @@ import scala.collection.mutable.ArrayBuffer
 
 case class Investment(name: String, investmentType: Taxonomy.InvestmentType = Taxonomy.Asset)
 
-case class Holding[+N](portfolio: N, asset: N, amount: Double)
-  extends DiEdge[N](NodeProduct(portfolio, asset))
+/*
+ * This is the edge subtype that represents a holding from an asset to an investment.
+ * I've left the ExtendedKey[N] mix in though it's not used in this case because it's not
+ * included in the keyAttribute (as I don't want it to be included in the key).
+ */
+case class Holding[+N](asset: N, investment: N, amount: Double)
+  extends DiEdge[N](NodeProduct(asset, investment))
   with    ExtendedKey[N]
   with    EdgeCopy[Holding]
   with    OuterEdge[N,Holding] {
@@ -20,17 +25,16 @@ case class Holding[+N](portfolio: N, asset: N, amount: Double)
          nodes.productElement(1).asInstanceOf[N], amount)
   }
 
-  def keyAttributes = Seq(amount) // This is wrong. There's nothing really "key" about the amount
+  def keyAttributes = Seq()
   override def copy[NN](newNodes: Product) = new Holding[NN](newNodes, amount)
   override protected def attributesToString = s" ($amount)" 
 }
 
-object Holding {
-  implicit final class ImplicitEdge[A <: Investment](val e: DiEdge[A]) extends AnyVal {
-    def ### (amount: Double) = new Holding[A](e.source, e.target, amount)
-  } 
-}
-
+/*
+ * Here I'm typing though a taxonomy. In reality I'd probably want to use
+ * either a subtype or composition in this case but it illustrates the
+ * mechanism effectively.
+ */
 object Taxonomy {
   sealed trait InvestmentType
   case object Portfolio extends InvestmentType
@@ -39,6 +43,10 @@ object Taxonomy {
   val types = Seq(Portfolio, Asset, ReturnStream)
 }
 
+/*
+ * Here's I've used case objects to define a set of standard filters. Obviously they
+ * could be more elaborate and they can be composed with boolean operators.
+ */
 object Filters {
   case object AssetsOnly extends ((Any) => Boolean) {
     def apply(a: Any) = a match {
