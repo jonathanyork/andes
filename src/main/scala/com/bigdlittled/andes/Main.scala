@@ -12,22 +12,22 @@ object Main extends App {
  import Holding._
  import Taxonomy._
  import Filters._
-
+ 
  val g = Graph(
-   Investment("Global 60/40", Portfolio)~>Investment("Equities") ### 0.5,
-     Investment("Equities")~>Investment("US Equities") ### 0.6,
-       Investment("US Equities")~>Investment("US Equities Excess Returns", ReturnStream) ### 1.0,
-       Investment("US Equities")~>Investment("USD Cash Returns", ReturnStream) ### 1.0,
-     Investment("Equities")~>Investment("EUR Equities") ### 0.4,
-       Investment("EUR Equities")~>Investment("EUR Equities Excess Returns", ReturnStream) ### 1.0,
-       Investment("EUR Equities")~>Investment("EUR Cash Returns", ReturnStream) ### 1.0,
-   Investment("Global 60/40", Portfolio)~>Investment("Bonds") ### 0.5,
-     Investment("Bonds")~>Investment("Nominal Bonds") ### 0.7,
-       Investment("Nominal Bonds")~>Investment("Nominal Bonds Excess Returns", ReturnStream) ### 1.0,
-       Investment("Nominal Bonds")~>Investment("USD Cash Returns", ReturnStream) ### 1.0,
-     Investment("Bonds")~>Investment("IL Bonds") ### 0.3,
-       Investment("IL Bonds")~>Investment("IL Bonds Excess Returns", ReturnStream) ### 1.0,
-       Investment("IL Bonds")~>Investment("USD Cash Returns", ReturnStream) ### 1.0,
+   (Investment("Global 60/40", Portfolio)~+>Investment("Equities"))(0.5),
+     (Investment("Equities")~+>Investment("US Equities"))(0.6),
+       (Investment("US Equities")~+>Investment("US Equities Excess Returns", ReturnStream))(1.0),
+       (Investment("US Equities")~+>Investment("USD Cash Returns", ReturnStream))(1.0),
+     (Investment("Equities")~+>Investment("EUR Equities"))(0.4),
+       (Investment("EUR Equities")~+>Investment("EUR Equities Excess Returns", ReturnStream))(1.0),
+       (Investment("EUR Equities")~+>Investment("EUR Cash Returns", ReturnStream))(1.0),
+   (Investment("Global 60/40", Portfolio)~+>Investment("Bonds"))(0.5),
+     (Investment("Bonds")~+>Investment("Nominal Bonds"))(0.7),
+       (Investment("Nominal Bonds")~+>Investment("Nominal Bonds Excess Returns", ReturnStream))(1.0),
+       (Investment("Nominal Bonds")~+>Investment("USD Cash Returns", ReturnStream))(1.0),
+     (Investment("Bonds")~+>Investment("IL Bonds"))(0.3),
+       (Investment("IL Bonds")~+>Investment("IL Bonds Excess Returns", ReturnStream))(1.0),
+       (Investment("IL Bonds")~+>Investment("USD Cash Returns", ReturnStream))(1.0),
    (Investment("Global 60/40", Portfolio)~+#>User("Big Boss"))(Permission.Read))
 
   // All the nodes
